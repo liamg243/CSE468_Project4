@@ -1,0 +1,39 @@
+# $Id: local.rules,v 1.11 2004/07/23 20:15:44 bmc Exp $
+# ----------------
+# LOCAL RULES
+# ----------------
+# This file intentionally does not come with signatures.  Put your local
+# additions here.
+
+
+
+#TASK 4.1 requirements, TCP header: source port 80, Dest. port 80, TCP SYN Flag 1, 
+#IP Header: Source IP = Destination IP = Target host's IP
+alert tcp $HOME_NET 80 -> $HOME_NET 80 (msg:"Land Attack"; flags:S; sid:10000001;)
+
+#TASK 4.2 requirements, TCP header: source port = any, Dest. port = open TCP port, TCP SYN flag = 1
+#Source IP = spoofed or random IP, destination IP = target host's IP
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"SYN Flood Attack"; flags:S; sid:10000002;)
+
+#TASK 4.3 requirements, ICMP header: type=8 (echo request), code=0, IP header: sourceIP = victim host's IP
+#destination IP = broadcast IP address of Client network
+alert icmp $HOME_NET any -> $HOME_NET any (msg:"Smurf Attack"; sid:10000003;)
+
+#TASK 4.4 requirements, UDP header: source port=any, dest.port=open UDP port number
+#IP header: sourceIP=spoofed or random IP, destination IP=target host's IP
+alert udp $EXTERNAL_NET any -> $HOME_NET any (msg:"UDP Flood Attack"; sid:10000004;)
+
+#TASK 4.5.a - TCP ACK Scan
+alert tcp any any -> $HOME_NET any (msg:"TCP ACK Scan"; flags:A; sid:10000005;)
+
+#TASK 4.5.b - TCP FIN Scan
+alert tcp any any -> $HOME_NET any (msg:"TCP FIN Scan"; flags:F; sid:10000006;)
+
+#TASK 4.5.c - TCP Xmas Scan
+alert tcp any any -> $HOME_NET any (msg:"TCP Xmas Scan"; flags:FPU; sid:10000007;)
+
+#TASK 4.5.d - TCP Null Scan
+alert tcp any any -> $HOME_NET any (msg:"TCP Null Scan"; dsize:0; sid:10000008;)
+
+#TASK 4.5.e - UDP Scan
+alert udp any any -> $HOME_NET any (msg:"UDP Scan"; sid:10000009;)
